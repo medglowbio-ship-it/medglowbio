@@ -1,2 +1,0 @@
-# medglowbio.github.io
-medglowbio
