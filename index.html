@@ -394,6 +394,68 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
   line-height: 1.8; word-break: keep-all;
 }
 
+/* ── ONDA SUB-OPTIONS ── */
+.card-expandable { cursor: default; }
+.card-expand-hint {
+  font-size: 11px; color: var(--rose);
+  letter-spacing: 0.15em; margin-top: 12px;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+}
+.card-suboptions {
+  margin-top: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+  border-top: 1px solid var(--rose-light); padding-top: 16px;
+}
+.suboption {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--rose-light);
+  background: var(--cream);
+  cursor: pointer; position: relative;
+  transition: background 0.25s, border-color 0.25s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.suboption:hover { background: #FBF7F4; border-color: var(--rose); }
+.suboption.selected {
+  background: #FDF5F3;
+  border-color: var(--rose-dark);
+  box-shadow: inset 0 0 0 1px var(--rose-dark);
+}
+.suboption-check {
+  flex-shrink: 0; margin-top: 2px;
+  width: 18px; height: 18px; border-radius: 50%;
+  border: 1.5px solid var(--dust); background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.suboption.selected .suboption-check { background: var(--rose-dark); border-color: var(--rose-dark); }
+.suboption-check svg { opacity: 0; transition: opacity 0.2s; }
+.suboption.selected .suboption-check svg { opacity: 1; }
+.suboption-label {
+  flex-shrink: 0;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 18px; font-weight: 300; color: var(--rose-light);
+  line-height: 1; margin-top: 1px; width: 14px; text-align: center;
+}
+.suboption.selected .suboption-label { color: var(--rose-dark); }
+.suboption-body { flex: 1; min-width: 0; }
+.suboption-name {
+  font-size: 13px; font-weight: 500; color: var(--ink);
+  line-height: 1.5; letter-spacing: 0.02em; margin-bottom: 6px;
+}
+.suboption-badge {
+  display: inline-block; font-size: 10px; font-weight: 300;
+  color: var(--rose-dark); border: 1px solid var(--rose-light);
+  padding: 1px 6px; border-radius: 2px;
+  letter-spacing: 0.05em; margin-top: 2px;
+}
+.suboption-original { font-size: 10px; color: #aaa; text-decoration: line-through; margin-bottom: 2px; }
+.suboption-price {
+  font-family: 'Cormorant Garamond', 'Noto Serif TC', serif;
+  font-size: 20px; font-weight: 400; color: var(--rose-dark);
+}
+
 /* ── SCROLL REVEAL ── */
 .reveal { opacity:0; transform:translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .reveal.visible { opacity:1; transform:translateY(0); }
@@ -482,29 +544,101 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
       </div>
     </div>
 
-    <div class="card reveal" data-id="t4" data-name="ONDA PRO 體雕" data-price="17500" data-tag="Body Sculpt">
-      <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <!-- 04 ONDA PRO 展開四選項 -->
+    <div class="card card-expandable reveal" id="cardT4Parent">
       <div class="card-number">04</div>
       <p class="card-tag">Body Sculpt</p>
       <p class="card-name">ONDA PRO 體雕</p>
       <p class="card-hook">局部頑固脂肪從來不是意志力的問題，是細胞的問題。不用恢復期，做完就能回去上班。</p>
-      <div class="card-price-block">
-        <p class="card-original">原價 $26,000 起</p>
-        <p class="card-price">$17,500</p>
-        <p class="card-price-note">單堂入門 ／ 三堂有感 $45,000</p>
+      <p class="card-expand-hint">▾ 選擇方案</p>
+
+      <div class="card-suboptions" id="ondaSubOptions">
+
+        <div class="suboption" data-id="t4a"
+             data-name="ONDA PRO 加贈消脂點滴一堂"
+             data-price="17500" data-tag="Body Sculpt">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">A</div>
+          <div class="suboption-body">
+            <p class="suboption-name">ONDA PRO 加贈消脂點滴一堂</p>
+            <p class="suboption-original">原價 $26,000</p>
+            <p class="suboption-price">$17,500</p>
+          </div>
+        </div>
+
+        <div class="suboption" data-id="t4b"
+             data-name="ONDA PRO 三堂＋消脂點滴兩堂（三堂有感方案）"
+             data-price="45000" data-tag="Body Sculpt">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">B</div>
+          <div class="suboption-body">
+            <p class="suboption-name">ONDA PRO 三堂＋消脂點滴兩堂<br><span class="suboption-badge">三堂有感方案</span></p>
+            <p class="suboption-original">原價 $52,000</p>
+            <p class="suboption-price">$45,000</p>
+          </div>
+        </div>
+
+        <div class="suboption" data-id="t4c"
+             data-name="ONDA PRO 一堂＋雙線 300 條"
+             data-price="26500" data-tag="Body Sculpt">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">C</div>
+          <div class="suboption-body">
+            <p class="suboption-name">ONDA PRO 一堂＋雙線 300 條</p>
+            <p class="suboption-original">原價 $40,500</p>
+            <p class="suboption-price">$26,500</p>
+          </div>
+        </div>
+
+        <div class="suboption" data-id="t4d"
+             data-name="ONDA PRO 一堂＋二代美音 200 條（眼周或輪廓線加強）"
+             data-price="43500" data-tag="Body Sculpt">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">D</div>
+          <div class="suboption-body">
+            <p class="suboption-name">ONDA PRO 一堂＋二代美音 200 條<br><span class="suboption-badge">眼周 or 輪廓線加強</span></p>
+            <p class="suboption-original">原價 $62,500</p>
+            <p class="suboption-price">$43,500</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <div class="card reveal" data-id="t5" data-name="電波音波複合方案" data-price="26500" data-tag="Anti-Aging">
-      <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <!-- 05 電波音波 展開兩選項 -->
+    <div class="card card-expandable reveal" id="cardT5Parent">
       <div class="card-number">05</div>
       <p class="card-tag">Anti-Aging</p>
       <p class="card-name">電波音波複合方案</p>
-      <p class="card-hook">電波從底層加熱膠原，音波從結構提拉筋膜。抗老選對武器，效果才真的有感。四種組合任選。</p>
-      <div class="card-price-block">
-        <p class="card-original">原價最高 $70,800</p>
-        <p class="card-price">$26,500 起</p>
-        <p class="card-price-note">四組方案詳洽診所</p>
+      <p class="card-hook">電波從底層加熱膠原，音波從結構提拉筋膜。抗老選對武器，效果才真的有感。</p>
+      <p class="card-expand-hint">▾ 選擇方案</p>
+
+      <div class="card-suboptions" id="rfSubOptions">
+
+        <div class="suboption" data-id="t5a"
+             data-name="超玩美 300 發＋雙線 300 條"
+             data-price="35000" data-tag="Anti-Aging">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">A</div>
+          <div class="suboption-body">
+            <p class="suboption-name">超玩美 300 發＋雙線 300 條</p>
+            <p class="suboption-original">原價 $47,900</p>
+            <p class="suboption-price">$35,000</p>
+          </div>
+        </div>
+
+        <div class="suboption" data-id="t5b"
+             data-name="超玩美全臉 900 發＋無針水光修復一堂"
+             data-price="62800" data-tag="Anti-Aging">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">B</div>
+          <div class="suboption-body">
+            <p class="suboption-name">超玩美全臉 900 發<br><span class="suboption-badge">加贈無針水光修復一堂</span></p>
+            <p class="suboption-original">原價 $70,800</p>
+            <p class="suboption-price">$62,800</p>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -614,13 +748,16 @@ let selectedTreatment = null;  // { id, name, price, tag }
 let selectedAddons    = {};    // { id: { name, price } }
 
 /* ══════════════════════════════════
-   Treatment 單選
+   Treatment 單選（排除 ONDA 展開卡）
 ══════════════════════════════════ */
-document.querySelectorAll('#treatmentGrid .card').forEach(card => {
+document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(card => {
   card.addEventListener('click', () => {
-    // 取消前一個
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#ondaSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#rfSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
 
     card.classList.add('selected');
     selectedTreatment = {
@@ -634,8 +771,56 @@ document.querySelectorAll('#treatmentGrid .card').forEach(card => {
 });
 
 /* ══════════════════════════════════
-   Addon 複選
+   ONDA PRO 子選項（單選）
 ══════════════════════════════════ */
+document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#treatmentGrid .card.selected')
+      .forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#ondaSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#rfSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+
+    opt.classList.add('selected');
+    document.getElementById('cardT4Parent').classList.add('selected');
+
+    selectedTreatment = {
+      id:    opt.dataset.id,
+      name:  opt.dataset.name,
+      price: parseInt(opt.dataset.price),
+      tag:   opt.dataset.tag,
+    };
+    updateSummary();
+  });
+});
+
+/* ══════════════════════════════════
+   電波音波 子選項（單選）
+══════════════════════════════════ */
+document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
+  opt.addEventListener('click', () => {
+    document.querySelectorAll('#treatmentGrid .card.selected')
+      .forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#ondaSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#rfSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+
+    opt.classList.add('selected');
+    document.getElementById('cardT5Parent').classList.add('selected');
+
+    selectedTreatment = {
+      id:    opt.dataset.id,
+      name:  opt.dataset.name,
+      price: parseInt(opt.dataset.price),
+      tag:   opt.dataset.tag,
+    };
+    updateSummary();
+  });
+});
+
+
 document.querySelectorAll('#addonGrid .addon-item').forEach(item => {
   item.addEventListener('click', () => {
     const id = item.dataset.id;
