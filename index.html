@@ -143,6 +143,81 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
   content: '✦'; font-size: 8px;
 }
 
+/* ── TREATMENT LAYOUT WITH IMAGE PANEL ── */
+.treatment-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 0;
+  align-items: start;
+}
+
+/* 右側圖片欄（桌機） */
+.treatment-img-panel {
+  position: sticky;
+  top: 24px;
+  height: calc(100vh - 48px);
+  max-height: 600px;
+  overflow: hidden;
+  background: var(--dust);
+  opacity: 0;
+  transform: translateX(24px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+}
+.treatment-img-panel.visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.treatment-img-panel img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.35s ease;
+}
+.treatment-img-panel .img-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(44,36,32,0.75), transparent);
+  padding: 32px 20px 20px;
+  color: var(--cream);
+  font-size: 12px; letter-spacing: 0.15em;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+}
+
+/* 手機版：卡片內底部圖片 */
+.card-img-mobile {
+  display: none;
+  width: calc(100% + 48px);
+  margin: 20px -24px -28px;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+.card-img-mobile img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s ease;
+}
+.card-img-mobile .img-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(44,36,32,0.35));
+}
+
+/* 手機版圖片僅在選中時展開 */
+@media(max-width: 900px) {
+  .treatment-layout {
+    grid-template-columns: 1fr;
+  }
+  .treatment-img-panel { display: none; }
+  .card.selected .card-img-mobile { display: block; }
+  .card-expandable.selected .card-img-mobile { display: block; }
+}
+
+/* 桌機隱藏手機圖片 */
+@media(min-width: 901px) {
+  .card-img-mobile { display: none !important; }
+}
+
 /* ── TREATMENT CARDS (selectable) ── */
 .cards-grid {
   display: grid;
@@ -503,9 +578,11 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
   <p class="section-title-zh reveal">六大療程組合・每一項都是妳值得好好處理的事</p>
   <p class="section-hint reveal">點選卡片選擇方案（單選）</p>
 
+  <div class="treatment-layout">
   <div class="cards-grid" id="treatmentGrid">
 
-    <div class="card reveal" data-id="t1" data-name="手工清粉刺＋皮秒蜂巢" data-price="5999" data-tag="Skin Reset">
+    <div class="card reveal" data-id="t1" data-name="手工清粉刺＋皮秒蜂巢" data-price="5999" data-tag="Skin Reset"
+         data-img="images/t1-skin.jpg">
       <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="card-number">01</div>
       <p class="card-tag">Skin Reset</p>
@@ -516,9 +593,14 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
         <p class="card-price">$5,999</p>
         <p class="card-price-note">母親節限定</p>
       </div>
+      <div class="card-img-mobile">
+        <img src="images/t1-skin.jpg" alt="手工清粉刺皮秒蜂巢" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
     </div>
 
-    <div class="card reveal" data-id="t2" data-name="彈力針" data-price="18500" data-tag="Contour Lift">
+    <div class="card reveal" data-id="t2" data-name="彈力針" data-price="18500" data-tag="Contour Lift"
+         data-img="images/t2-filler.jpg">
       <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="card-number">02</div>
       <p class="card-tag">Contour Lift</p>
@@ -529,9 +611,14 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
         <p class="card-price">$18,500</p>
         <p class="card-price-note">單支體驗 ／ 三支 $54,000</p>
       </div>
+      <div class="card-img-mobile">
+        <img src="images/t2-filler.jpg" alt="彈力針" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
     </div>
 
-    <div class="card reveal" data-id="t3" data-name="蝴蝶電波＋私密外陰嫩膚" data-price="42000" data-tag="Full Renewal">
+    <div class="card reveal" data-id="t3" data-name="蝴蝶電波＋私密外陰嫩膚" data-price="42000" data-tag="Full Renewal"
+         data-img="images/t3-rf.jpg">
       <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="card-number">03</div>
       <p class="card-tag">Full Renewal</p>
@@ -542,10 +629,15 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
         <p class="card-price">$42,000</p>
         <p class="card-price-note">加贈私密嫩膚一堂</p>
       </div>
+      <div class="card-img-mobile">
+        <img src="images/t3-rf.jpg" alt="蝴蝶電波" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
     </div>
 
     <!-- 04 ONDA PRO 展開四選項 -->
-    <div class="card card-expandable reveal" id="cardT4Parent">
+    <div class="card card-expandable reveal" id="cardT4Parent"
+         data-img="images/t4-onda.jpg">
       <div class="card-number">04</div>
       <p class="card-tag">Body Sculpt</p>
       <p class="card-name">ONDA PRO 體雕</p>
@@ -603,10 +695,15 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
         </div>
 
       </div>
+      <div class="card-img-mobile">
+        <img src="images/t4-onda.jpg" alt="ONDA PRO 體雕" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
     </div>
 
     <!-- 05 電波音波 展開兩選項 -->
-    <div class="card card-expandable reveal" id="cardT5Parent">
+    <div class="card card-expandable reveal" id="cardT5Parent"
+         data-img="images/t5-rf.jpg">
       <div class="card-number">05</div>
       <p class="card-tag">Anti-Aging</p>
       <p class="card-name">電波音波複合方案</p>
@@ -639,10 +736,16 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
           </div>
         </div>
 
-      </div>
-    </div>
+      </div><!-- /rfSubOptions -->
 
-    <div class="card reveal" data-id="t6" data-name="莫菲斯12K眼周＋魚尾肉毒" data-price="26999" data-tag="Eye Revival">
+      <div class="card-img-mobile">
+        <img src="images/t5-rf.jpg" alt="電波音波複合方案" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
+    </div><!-- /cardT5Parent -->
+
+    <div class="card reveal" data-id="t6" data-name="莫菲斯12K眼周＋魚尾肉毒" data-price="26999" data-tag="Eye Revival"
+         data-img="images/t6-eye.jpg">
       <div class="card-check"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="card-number">06</div>
       <p class="card-tag">Eye Revival</p>
@@ -653,9 +756,21 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
         <p class="card-price">$26,999</p>
         <p class="card-price-note">加贈魚尾肉毒 12U</p>
       </div>
+      <div class="card-img-mobile">
+        <img src="images/t6-eye.jpg" alt="莫菲斯眼周療程" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
     </div>
 
+  </div><!-- /cards-grid -->
+
+  <!-- 右側圖片欄（桌機） -->
+  <div class="treatment-img-panel" id="treatmentImgPanel">
+    <img src="" alt="" id="treatmentImgEl">
+    <p class="img-caption" id="treatmentImgCaption"></p>
   </div>
+
+  </div><!-- /treatment-layout -->
 </section>
 
 <!-- ADDON -->
@@ -767,6 +882,7 @@ document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(
       tag:   card.dataset.tag,
     };
     updateSummary();
+    updateTreatmentImage(card.dataset.img, card.dataset.name);
   });
 });
 
@@ -792,6 +908,10 @@ document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
       tag:   opt.dataset.tag,
     };
     updateSummary();
+    updateTreatmentImage(
+      document.getElementById('cardT4Parent').dataset.img,
+      opt.dataset.name
+    );
   });
 });
 
@@ -817,6 +937,10 @@ document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
       tag:   opt.dataset.tag,
     };
     updateSummary();
+    updateTreatmentImage(
+      document.getElementById('cardT5Parent').dataset.img,
+      opt.dataset.name
+    );
   });
 });
 
@@ -876,8 +1000,33 @@ function updateSummary() {
 }
 
 /* ══════════════════════════════════
-   傳送預約訊息
+   右側圖片欄更新
 ══════════════════════════════════ */
+function updateTreatmentImage(imgSrc, caption) {
+  const panel   = document.getElementById('treatmentImgPanel');
+  const imgEl   = document.getElementById('treatmentImgEl');
+  const capEl   = document.getElementById('treatmentImgCaption');
+
+  if (!imgSrc) {
+    panel.classList.remove('visible');
+    return;
+  }
+
+  // 淡出 → 換圖 → 淡入
+  imgEl.style.opacity = '0';
+  setTimeout(() => {
+    imgEl.src = imgSrc;
+    imgEl.alt = caption || '';
+    capEl.textContent = caption || '';
+    imgEl.onload = () => { imgEl.style.opacity = '1'; };
+    // 若圖片已快取 onload 不觸發，直接設
+    if (imgEl.complete) imgEl.style.opacity = '1';
+  }, 200);
+
+  panel.classList.add('visible');
+}
+
+
 document.getElementById('bookBtn').addEventListener('click', async () => {
   if (!selectedTreatment) {
     showToast('請先選擇療程方案 ✦');
