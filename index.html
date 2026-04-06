@@ -5,6 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F7F2EC">
 <title>艾絲柏 2026 母親節限定</title>
+
+<!-- ★ Meta Pixel — 將 YOUR_PIXEL_ID 換成你的像素 ID -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', 'YOUR_PIXEL_ID');
+fbq('track', 'PageView');
+</script>
+<noscript>
+  <img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=YOUR_PIXEL_ID&ev=PageView&noscript=1"/>
+</noscript>
+<!-- End Meta Pixel -->
 <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+TC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -424,6 +443,10 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
   font-size: 13px; color: var(--ink); font-weight: 500;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   letter-spacing: 0.03em;
+}
+.summary-treatment-empty {
+  font-size: 12px; color: var(--ink-light); font-weight: 300;
+  letter-spacing: 0.04em; line-height: 1.5;
 }
 .summary-addons {
   margin-top: 3px;
@@ -864,11 +887,17 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
 </div>
 
 <!-- FIXED SUMMARY BAR -->
-<div class="summary-bar hidden empty" id="summaryBar">
+<div class="summary-bar" id="summaryBar">
   <div class="summary-bar-inner">
-    <div class="summary-info">
+    <!-- 未選狀態 -->
+    <div class="summary-info" id="summaryEmpty">
+      <p class="summary-label">不確定從哪裡開始？</p>
+      <p class="summary-treatment-empty">不知道自己適合什麼樣的療程</p>
+    </div>
+    <!-- 已選狀態 -->
+    <div class="summary-info" id="summarySelected" style="display:none">
       <p class="summary-label">已選方案</p>
-      <p class="summary-treatment" id="summaryTreatment">請先選擇療程方案</p>
+      <p class="summary-treatment" id="summaryTreatment"></p>
       <div class="summary-addons" id="summaryAddons"></div>
       <p class="summary-total" id="summaryTotal"></p>
     </div>
@@ -876,7 +905,7 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
       <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 2C6.48 2 2 6.03 2 11c0 3.09 1.73 5.82 4.35 7.51L5.5 22l4.22-1.84C10.42 20.38 11.2 20.5 12 20.5c5.52 0 10-4.03 10-9S17.52 2 12 2z"/>
       </svg>
-      傳送預約
+      <span id="bookBtnText">傳送諮詢</span>
     </button>
   </div>
 </div>
@@ -998,36 +1027,34 @@ document.querySelectorAll('#addonGrid .addon-item').forEach(item => {
    Summary bar 更新
 ══════════════════════════════════ */
 function updateSummary() {
-  const bar         = document.getElementById('summaryBar');
+  const emptyEl     = document.getElementById('summaryEmpty');
+  const selectedEl  = document.getElementById('summarySelected');
   const treatmentEl = document.getElementById('summaryTreatment');
   const addonsEl    = document.getElementById('summaryAddons');
   const totalEl     = document.getElementById('summaryTotal');
-
-  bar.classList.remove('hidden');
+  const btnText     = document.getElementById('bookBtnText');
 
   if (!selectedTreatment) {
-    bar.classList.add('empty');
-    treatmentEl.textContent = '請先選擇療程方案';
-    addonsEl.innerHTML = '';
-    totalEl.textContent = '';
+    // 未選狀態
+    emptyEl.style.display   = 'block';
+    selectedEl.style.display = 'none';
+    btnText.textContent = '傳送諮詢';
     return;
   }
 
-  bar.classList.remove('empty');
+  // 已選狀態
+  emptyEl.style.display   = 'none';
+  selectedEl.style.display = 'block';
+  btnText.textContent = '傳送預約';
 
   const addonList  = Object.values(selectedAddons);
   const addonTotal = addonList.reduce((s, a) => s + a.price, 0);
   const grandTotal = selectedTreatment.price + addonTotal;
 
-  // 療程名稱
   treatmentEl.textContent = selectedTreatment.name;
-
-  // 加購 tags（每個獨立小標籤）
   addonsEl.innerHTML = addonList
     .map(a => `<span class="summary-addon-tag">＋${a.name}</span>`)
     .join('');
-
-  // 合計
   totalEl.textContent = `$${grandTotal.toLocaleString()}`;
 }
 
@@ -1064,8 +1091,26 @@ function updateTreatmentImage(imgSrc, caption) {
 
 
 document.getElementById('bookBtn').addEventListener('click', async () => {
+
+  // 未選療程 → 傳送諮詢訊息
   if (!selectedTreatment) {
-    showToast('請先選擇療程方案 ✦');
+    const consultMsg = `💐 母親節限定｜療程諮詢申請
+
+您好，我對艾絲柏母親節限定療程有興趣，
+但還不確定哪個方案最適合我，
+麻煩幫我安排諮詢，謝謝 🙏`;
+
+    if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
+      try {
+        await liff.sendMessages([{ type: 'text', text: consultMsg }]);
+        showToast('已傳送！我們將盡快與您聯繫 💐');
+        setTimeout(() => liff.closeWindow(), 1200);
+      } catch { showToast('傳送失敗，請直接私訊我們'); }
+    } else {
+      try { await navigator.clipboard.writeText(consultMsg); } catch {}
+      showToast('請私訊艾絲柏官方帳號進行諮詢 💐');
+      setTimeout(() => window.open(`https://line.me/R/ti/p/${LINE_OA}`, '_blank'), 800);
+    }
     return;
   }
 
@@ -1097,6 +1142,14 @@ ${addonLines}
   if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) {
     try {
       await liff.sendMessages([{ type: 'text', text: msgText }]);
+      // ★ Pixel：預約成功 → Lead 事件
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+          content_name: selectedTreatment.name,
+          value: grandTotal,
+          currency: 'TWD',
+        });
+      }
       showToast('已傳送！我們將盡快與您聯繫 💐');
       setTimeout(() => liff.closeWindow(), 1200);
     } catch (err) {
@@ -1107,6 +1160,14 @@ ${addonLines}
     // 非 LINE 環境：複製到剪貼簿 + 開啟 LINE OA
     try {
       await navigator.clipboard.writeText(msgText);
+      // ★ Pixel：Lead 事件（fallback 路徑）
+      if (typeof fbq !== 'undefined') {
+        fbq('track', 'Lead', {
+          content_name: selectedTreatment.name,
+          value: grandTotal,
+          currency: 'TWD',
+        });
+      }
       showToast('已複製訊息，請貼至 LINE 官方帳號 💐');
     } catch {
       showToast('請截圖並私訊艾絲柏官方帳號 💐');
