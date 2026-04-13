@@ -924,10 +924,33 @@ let selectedTreatment = null;  // { id, name, price, tag }
 let selectedAddons    = {};    // { id: { name, price } }
 
 /* ══════════════════════════════════
+   清除選擇
+══════════════════════════════════ */
+function clearSelection() {
+  selectedTreatment = null;
+  document.querySelectorAll('#treatmentGrid .card.selected')
+    .forEach(c => c.classList.remove('selected', 'has-img'));
+  document.querySelectorAll('#ondaSubOptions .suboption.selected')
+    .forEach(s => s.classList.remove('selected'));
+  document.querySelectorAll('#rfSubOptions .suboption.selected')
+    .forEach(s => s.classList.remove('selected'));
+  document.getElementById('treatmentImgPanel').classList.remove('visible');
+  updateSummary();
+}
+
+document.getElementById('clearBtn').addEventListener('click', clearSelection);
+
+/* ══════════════════════════════════
    Treatment 單選（排除 ONDA 展開卡）
 ══════════════════════════════════ */
 document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(card => {
   card.addEventListener('click', () => {
+    // Toggle：再點已選卡片 → 取消
+    if (card.classList.contains('selected')) {
+      clearSelection();
+      return;
+    }
+
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
@@ -952,6 +975,12 @@ document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(
 ══════════════════════════════════ */
 document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
   opt.addEventListener('click', () => {
+    // Toggle：再點已選子選項 → 取消
+    if (opt.classList.contains('selected')) {
+      clearSelection();
+      return;
+    }
+
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
@@ -981,6 +1010,12 @@ document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
 ══════════════════════════════════ */
 document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
   opt.addEventListener('click', () => {
+    // Toggle：再點已選子選項 → 取消
+    if (opt.classList.contains('selected')) {
+      clearSelection();
+      return;
+    }
+
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
@@ -1191,9 +1226,7 @@ function showToast(msg) {
 /* ══════════════════════════════════
    LIFF 初始化
 ══════════════════════════════════ */
-if (LIFF_ID !== "2009700669-uHePzsWq") {
-  liff.init({ liffId: LIFF_ID }).catch(err => console.warn('LIFF init:', err));
-}
+liff.init({ liffId: LIFF_ID }).catch(err => console.warn('LIFF init:', err));
 
 /* ══════════════════════════════════
    Scroll Reveal
