@@ -896,7 +896,10 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
     </div>
     <!-- 已選狀態 -->
     <div class="summary-info" id="summarySelected" style="display:none">
-      <p class="summary-label">已選方案</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+        <p class="summary-label">已選方案</p>
+        <button id="clearBtn" style="background:none;border:none;cursor:pointer;color:#D4B8AF;font-size:13px;padding:2px 4px;line-height:1;" title="清除選擇">✕</button>
+      </div>
       <p class="summary-treatment" id="summaryTreatment"></p>
       <div class="summary-addons" id="summaryAddons"></div>
       <p class="summary-total" id="summaryTotal"></p>
@@ -924,33 +927,10 @@ let selectedTreatment = null;  // { id, name, price, tag }
 let selectedAddons    = {};    // { id: { name, price } }
 
 /* ══════════════════════════════════
-   清除選擇
-══════════════════════════════════ */
-function clearSelection() {
-  selectedTreatment = null;
-  document.querySelectorAll('#treatmentGrid .card.selected')
-    .forEach(c => c.classList.remove('selected', 'has-img'));
-  document.querySelectorAll('#ondaSubOptions .suboption.selected')
-    .forEach(s => s.classList.remove('selected'));
-  document.querySelectorAll('#rfSubOptions .suboption.selected')
-    .forEach(s => s.classList.remove('selected'));
-  document.getElementById('treatmentImgPanel').classList.remove('visible');
-  updateSummary();
-}
-
-document.getElementById('clearBtn').addEventListener('click', clearSelection);
-
-/* ══════════════════════════════════
    Treatment 單選（排除 ONDA 展開卡）
 ══════════════════════════════════ */
 document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(card => {
   card.addEventListener('click', () => {
-    // Toggle：再點已選卡片 → 取消
-    if (card.classList.contains('selected')) {
-      clearSelection();
-      return;
-    }
-
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
@@ -975,12 +955,6 @@ document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(
 ══════════════════════════════════ */
 document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
   opt.addEventListener('click', () => {
-    // Toggle：再點已選子選項 → 取消
-    if (opt.classList.contains('selected')) {
-      clearSelection();
-      return;
-    }
-
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
@@ -1010,12 +984,6 @@ document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
 ══════════════════════════════════ */
 document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
   opt.addEventListener('click', () => {
-    // Toggle：再點已選子選項 → 取消
-    if (opt.classList.contains('selected')) {
-      clearSelection();
-      return;
-    }
-
     document.querySelectorAll('#treatmentGrid .card.selected')
       .forEach(c => c.classList.remove('selected'));
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
