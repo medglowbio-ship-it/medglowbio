@@ -817,6 +817,49 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
       </div>
     </div>
 
+    <!-- 07 OLIB 展開兩選項 -->
+    <div class="card card-expandable reveal" id="cardT7Parent"
+         data-img="images/t7-olib.png">
+      <div class="card-number">07</div>
+      <p class="card-tag">OLIB Laser</p>
+      <p class="card-name">OLIB 無針式靜脈雷射</p>
+      <p class="card-hook">635nm 波長紅光穿透血管照射血液，促進血液循環、增強攜氧能力、代謝自由基並提升免疫調節。</p>
+      <p class="card-expand-hint">▾ 選擇方案</p>
+
+      <div class="card-suboptions" id="olibSubOptions">
+
+        <div class="suboption" data-id="t7a"
+             data-name="OLIB 無針式靜脈雷射 十堂贈二堂"
+             data-price="30000" data-tag="OLIB Laser">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">A</div>
+          <div class="suboption-body">
+            <p class="suboption-name">OLIB 無針式靜脈雷射<br><span class="suboption-badge">十堂 🎁 贈二堂</span></p>
+            <p class="suboption-original">原價 $35,000</p>
+            <p class="suboption-price">$30,000</p>
+          </div>
+        </div>
+
+        <div class="suboption" data-id="t7b"
+             data-name="靜脈雷射 十二堂 + 客製化營養點滴 五堂"
+             data-price="42000" data-tag="IV Nutrient Therapy">
+          <div class="suboption-check"><svg width="8" height="6" viewBox="0 0 8 6" fill="none"><path d="M1 3l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="suboption-label">B</div>
+          <div class="suboption-body">
+            <p class="suboption-name">靜脈雷射 十二堂 + 客製化營養點滴 五堂</p>
+            <p class="suboption-original">原價 $57,500</p>
+            <p class="suboption-price">$42,000</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-img-mobile">
+        <img src="images/t7-olib.png" alt="OLIB 無針式靜脈雷射" loading="lazy">
+        <div class="img-overlay"></div>
+      </div>
+    </div>
+
   </div><!-- /cards-grid -->
 
   <!-- 右側圖片欄（桌機） -->
@@ -937,6 +980,8 @@ document.querySelectorAll('#treatmentGrid .card:not(.card-expandable)').forEach(
       .forEach(s => s.classList.remove('selected'));
     document.querySelectorAll('#rfSubOptions .suboption.selected')
       .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#olibSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
 
     card.classList.add('selected');
     selectedTreatment = {
@@ -960,6 +1005,8 @@ document.querySelectorAll('#ondaSubOptions .suboption').forEach(opt => {
     document.querySelectorAll('#ondaSubOptions .suboption.selected')
       .forEach(s => s.classList.remove('selected'));
     document.querySelectorAll('#rfSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#olibSubOptions .suboption.selected')
       .forEach(s => s.classList.remove('selected'));
 
     opt.classList.add('selected');
@@ -990,6 +1037,8 @@ document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
       .forEach(s => s.classList.remove('selected'));
     document.querySelectorAll('#rfSubOptions .suboption.selected')
       .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#olibSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
 
     opt.classList.add('selected');
     document.getElementById('cardT5Parent').classList.add('selected');
@@ -1003,6 +1052,41 @@ document.querySelectorAll('#rfSubOptions .suboption').forEach(opt => {
     updateSummary();
     updateTreatmentImage(
       document.getElementById('cardT5Parent').dataset.img,
+      opt.dataset.name
+    );
+  });
+});
+
+/* ══════════════════════════════════
+   OLIB 子選項（單選）
+══════════════════════════════════ */
+document.querySelectorAll('#olibSubOptions .suboption').forEach(opt => {
+  opt.addEventListener('click', () => {
+    if (opt.classList.contains('selected')) { clearSelection(); return; }
+
+    document.querySelectorAll('#treatmentGrid .card.selected')
+      .forEach(c => c.classList.remove('selected'));
+    document.querySelectorAll('#ondaSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#rfSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#olibSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+    document.querySelectorAll('#olibSubOptions .suboption.selected')
+      .forEach(s => s.classList.remove('selected'));
+
+    opt.classList.add('selected');
+    document.getElementById('cardT7Parent').classList.add('selected');
+
+    selectedTreatment = {
+      id:    opt.dataset.id,
+      name:  opt.dataset.name,
+      price: parseInt(opt.dataset.price),
+      tag:   opt.dataset.tag,
+    };
+    updateSummary();
+    updateTreatmentImage(
+      document.getElementById('cardT7Parent').dataset.img,
       opt.dataset.name
     );
   });
@@ -1138,7 +1222,7 @@ ${addonLines}
 
 【合計金額】$${grandTotal.toLocaleString()}
 
-───────────────
+─────────────────
 我想了解這個方案的預約諮詢，請協助安排 🙏`;
 
   // 嘗試透過 LIFF 傳送；若非 LINE 環境則 fallback
