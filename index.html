@@ -709,7 +709,7 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
           <div class="suboption-body">
             <p class="suboption-name">ONDA PRO 加🎁消脂點滴一堂</p>
             <p class="suboption-original">原價 $26,000</p>
-            <p class="suboption-price">$17,500</p>
+            <p class="suboption-price">$私訊詢問價</p>
           </div>
         </div>
 
@@ -945,7 +945,6 @@ section { padding: 64px 20px; max-width: 960px; margin: 0 auto; }
       </div>
       <p class="summary-treatment" id="summaryTreatment"></p>
       <div class="summary-addons" id="summaryAddons"></div>
-      <p class="summary-total" id="summaryTotal"></p>
     </div>
     <button class="book-btn" id="bookBtn">
       <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -1118,31 +1117,24 @@ function updateSummary() {
   const selectedEl  = document.getElementById('summarySelected');
   const treatmentEl = document.getElementById('summaryTreatment');
   const addonsEl    = document.getElementById('summaryAddons');
-  const totalEl     = document.getElementById('summaryTotal');
   const btnText     = document.getElementById('bookBtnText');
 
   if (!selectedTreatment) {
-    // 未選狀態
-    emptyEl.style.display   = 'block';
+    emptyEl.style.display    = 'block';
     selectedEl.style.display = 'none';
     btnText.textContent = '傳送諮詢';
     return;
   }
 
-  // 已選狀態
-  emptyEl.style.display   = 'none';
+  emptyEl.style.display    = 'none';
   selectedEl.style.display = 'block';
   btnText.textContent = '傳送預約';
 
-  const addonList  = Object.values(selectedAddons);
-  const addonTotal = addonList.reduce((s, a) => s + a.price, 0);
-  const grandTotal = selectedTreatment.price + addonTotal;
-
+  const addonList = Object.values(selectedAddons);
   treatmentEl.textContent = selectedTreatment.name;
   addonsEl.innerHTML = addonList
     .map(a => `<span class="summary-addon-tag">＋${a.name}</span>`)
     .join('');
-  totalEl.textContent = `$${grandTotal.toLocaleString()}`;
 }
 
 /* ══════════════════════════════════
@@ -1201,13 +1193,11 @@ document.getElementById('bookBtn').addEventListener('click', async () => {
     return;
   }
 
-  const addonList  = Object.values(selectedAddons);
-  const addonTotal = addonList.reduce((s, a) => s + a.price, 0);
-  const grandTotal = selectedTreatment.price + addonTotal;
+  const addonList = Object.values(selectedAddons);
 
   // 組訊息內容
   const addonLines = addonList.length
-    ? addonList.map(a => `  • ${a.name}（+$${a.price.toLocaleString()}）`).join('\n')
+    ? addonList.map(a => `  • ${a.name}`).join('\n')
     : '  （無加購）';
 
   const msgText =
@@ -1215,12 +1205,9 @@ document.getElementById('bookBtn').addEventListener('click', async () => {
 
 【療程方案】
   ${selectedTreatment.tag} — ${selectedTreatment.name}
-  方案價格：$${selectedTreatment.price.toLocaleString()}
 
 【加購項目】
 ${addonLines}
-
-【合計金額】$${grandTotal.toLocaleString()}
 
 ─────────────────
 我想了解這個方案的預約諮詢，請協助安排 🙏`;
@@ -1231,11 +1218,7 @@ ${addonLines}
       await liff.sendMessages([{ type: 'text', text: msgText }]);
       // ★ Pixel：預約成功 → Lead 事件
       if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
-          content_name: selectedTreatment.name,
-          value: grandTotal,
-          currency: 'TWD',
-        });
+        fbq('track', 'Lead', { content_name: selectedTreatment.name });
       }
       showToast('已傳送！我們將盡快與您聯繫 💐');
       setTimeout(() => liff.closeWindow(), 1200);
@@ -1249,11 +1232,7 @@ ${addonLines}
       await navigator.clipboard.writeText(msgText);
       // ★ Pixel：Lead 事件（fallback 路徑）
       if (typeof fbq !== 'undefined') {
-        fbq('track', 'Lead', {
-          content_name: selectedTreatment.name,
-          value: grandTotal,
-          currency: 'TWD',
-        });
+        fbq('track', 'Lead', { content_name: selectedTreatment.name });
       }
       showToast('已複製訊息，請貼至 LINE 官方帳號 💐');
     } catch {
